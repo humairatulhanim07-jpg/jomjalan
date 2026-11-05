@@ -9,10 +9,18 @@ function getSavedPlans() {
 function savePlanToStorage(planObj, editIndex = "") {
     let plans = getSavedPlans();
     
-    if (editIndex === "" || editIndex === null || isNaN(editIndex)) {
+    if (editIndex === "") {
         plans.push(planObj);
     } else {
-        plans[editIndex] = planObj;
+        if (editIndex === null) {
+            plans.push(planObj);
+        } else {
+            if (isNaN(editIndex)) {
+                plans.push(planObj);
+            } else {
+                plans[editIndex] = planObj;
+            }
+        }
     }
     
     localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
