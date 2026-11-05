@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JomJalan - Tourist Attractions Explorer</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="brand-title">
+                <h1><i class="fa-solid fa-earth-americas"></i> JomJalan</h1>
+            </div>
+            <div class="header-right">
+                <nav class="nav-links">
+                    <a href="index.html"><i class="fa-solid fa-compass"></i> Explore</a>
+                    <a href="worldtime.html"><i class="fa-solid fa-clock"></i> World Time</a>
+                    <a href="places.html" class="active"><i class="fa-solid fa-map-location-dot"></i> Attractions</a>
+                    <a href="plans.html"><i class="fa-solid fa-bookmark"></i> My Plans</a>
+                </nav>
+                <button id="openAuthBtn" class="btn-signin">
+                    <i class="fa-solid fa-user"></i> Sign In
+                </button>
+            </div>
+        </header>
+
+        <section class="hero-section">
+            <h2 class="hero-title">Tourist Attractions Explorer</h2>
+            <p class="hero-subtitle">Discover famous landmarks, sights, and top tourist destinations across the world.</p>
+            <div class="search-bar-inline">
+                <div class="input-group">
+                    <select id="citySelect" class="custom-select">
+                        <option value="">-- Select Destination City --</option>
+                        <option value="Tokyo">Tokyo, Japan</option>
+                        <option value="Kuala Lumpur">Kuala Lumpur, Malaysia</option>
+                        <option value="Paris">Paris, France</option>
+                        <option value="Sydney">Sydney, Australia</option>
+                        <option value="London">London, United Kingdom</option>
+                    </select>
+                </div>
+                <button id="fetchAttractionsBtn" class="btn-explore">
+                    <i class="fa-solid fa-camera-retro"></i> Discover Places
+                </button>
+            </div>
+        </section>
+
+        <div id="attractionsResultContainer" style="display: none;">
+            <div class="destination-banner" id="attractionBannerBg">
+                <div class="banner-overlay">
+                    <h2 id="attractionCityTitle">Popular Attractions</h2>
+                    <p>Curated Top Sights & Landmarks</p>
+                </div>
+            </div>
+
+            <div id="attractionsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 16px;">
+            </div>
+        </div>
+    </div>
+
+    <div id="authModal" class="modal-overlay" style="display: none;">
+        <div class="modal-card">
+            <button id="closeAuthBtn" class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+            <h3 style="margin-bottom: 20px; color: var(--primary);"><i class="fa-solid fa-user"></i> Sign In to JomJalan</h3>
+            <form id="authForm" style="display: flex; flex-direction: column; gap: 14px;">
+                <div class="input-group">
+                    <label for="emailInput">Email Address:</label>
+                    <input type="email" id="emailInput" class="custom-input" placeholder="user@example.com" required>
+                </div>
+                <div class="input-group">
+                    <label for="passwordInput">Password:</label>
+                    <input type="password" id="passwordInput" class="custom-input" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-explore" style="width: 100%; margin-top: 8px;">Sign In</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const cityBannerImages = {
+            "Tokyo": "https://images.stockcake.com/public/9/1/c/91cb21a5-56dc-4e4d-bf8f-593aae67d568_large/flag-and-fuji-stockcake.jpg",
+            "Kuala Lumpur": "https://cdn.travelpal.ai/prod/places/_YWFS-hOyPElh90IFhVEq111-tW/photos/google/webp/0c3c92b50f4559c0d70211d1.webp",
+            "Paris": "https://www.shutterstock.com/image-photo/french-flag-flying-bright-blue-260nw-631566374.jpg",
+            "Sydney": "https://i.pinimg.com/originals/d9/3e/9a/d93e9a594aa477bb26c8bf28931990d9.jpg",
+            "London": "https://tse4.mm.bing.net/th/id/OIP.oRMxlN2XmwPxX0fY3KA2NwHaEJ?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+        };
+
+        const attractionsData = {
+            "Tokyo": [
+                { name: "Senso-ji Temple", category: "Historic Temple", address: "2 Chome-3-1 Asakusa, Taito City, Tokyo", img: "https://img.lovepik.com/photo/48017/1814.jpg_wh860.jpg" },
+                { name: "Tokyo Skytree", category: "Modern Landmark", address: "1 Chome-1-2 Oshiage, Sumida City, Tokyo", img: "https://i.pinimg.com/originals/af/cc/f3/afccf367f361ce0a166a4d46032cfb04.jpg" },
+                { name: "Shibuya Crossing", category: "Famous Intersection", address: "Shibuya City, Tokyo", img: "https://shibuyacrossing.org/wp-content/uploads/2024/11/shibuya-crossing-tokyo-japan-night-view-1.jpeg" },
+                { name: "Meiji Shrine", category: "Shinto Shrine", address: "1-1 Yoyogikamizonocho, Shibuya City, Tokyo", img: "https://static.toiimg.com/photo/55975839/.jpg" }
+            ],
+            "Kuala Lumpur": [
+                { name: "Petronas Twin Towers", category: "Iconic Skyscraper", address: "Concourse Level, Petronas Twin Tower, KLCC", img: "https://cdn.pixabay.com/photo/2024/04/16/18/19/petronas-twin-towers-8700576_1280.jpg" },
+                { name: "Batu Caves", category: "Limestone Cave & Temple", address: "Gombak, 68100 Batu Caves, Selangor", img: "https://www.indiaimagine.com/wp-content/uploads/2020/09/batu-caves-kuala-lumpur.jpg" },
+                { name: "Merdeka Square", category: "Historical Landmark", address: "Jalan Raja, City Centre, Kuala Lumpur", img: "https://farm3.staticflickr.com/2472/3712982132_907f926a22_o.jpg" },
+                { name: "KL Tower", category: "Communication Tower", address: "2 Jalan Punchak, Off, Jalan P. Ramlee, KL", img: "https://tse3.mm.bing.net/th/id/OIP.Rlo4GAjqdzwHIhdULbHk4gHaFj?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" }
+            ],
+            "Paris": [
+                { name: "Eiffel Tower", category: "World Landmark", address: "Champ de Mars, 5 Av. Anatole France, Paris", img: "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?auto=format&fit=crop&w=600&q=80" },
+                { name: "Louvre Museum", category: "Art Museum", address: "Rue de Rivoli, 75001 Paris, France", img: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=600&q=80" },
+                { name: "Notre-Dame Cathedral", category: "Gothic Architecture", address: "6 Parvis Notre-Dame, 75004 Paris, France", img: "https://cdn.britannica.com/85/83885-050-9CDCFEA9/Notre-Dame-de-Paris-France.jpg" }
+            ],
+            "Sydney": [
+                { name: "Sydney Opera House", category: "Performing Arts Center", address: "Bennelong Point, Sydney NSW 2000", img: "https://cdn.britannica.com/96/100196-004-E377C5F3/Sydney-Opera-House-Port-Jackson.jpg" },
+                { name: "Sydney Harbour Bridge", category: "Engineering Icon", address: "Sydney NSW 2000, Australia", img: "https://tse4.mm.bing.net/th/id/OIP.PjiyNZJhUFWh6GxG4-zQVgHaE8?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" },
+                { name: "Bondi Beach", category: "Famous Beach", address: "Bondi Beach, NSW 2026, Australia", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" }
+            ],
+            "London": [
+                { name: "Big Ben & Houses of Parliament", category: "Historic Landmark", address: "Westminster, London SW1A 0AA", img: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=600&q=80" },
+                { name: "London Eye", category: "Observation Wheel", address: "Riverside Building, County Hall, London", img: "https://images.unsplash.com/photo-1486299267070-83823f5448dd?auto=format&fit=crop&w=600&q=80" },
+                { name: "Tower of London", category: "Historic Castle", address: "St Katharine's & Wapping, London", img: "https://images.unsplash.com/photo-1526129318478-62ed807ebdf9?auto=format&fit=crop&w=600&q=80" }
+            ]
+        };
+
+        document.getElementById("fetchAttractionsBtn").addEventListener("click", () => {
+            const city = document.getElementById("citySelect").value;
+            const container = document.getElementById("attractionsResultContainer");
+            const grid = document.getElementById("attractionsGrid");
+            const banner = document.getElementById("attractionBannerBg");
+
+            if (!city) {
+                alert("Please select a city first!");
+                return;
+            }
+
+            container.style.display = "block";
+            document.getElementById("attractionCityTitle").innerText = `${city} Attractions`;
+            banner.style.backgroundImage = `linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('${cityBannerImages[city]}')`;
+            grid.innerHTML = "";
+
+            const places = attractionsData[city] || [];
+
+            if (places.length === 0) {
+                grid.innerHTML = `<p style="color: var(--text-muted);">No tourist attraction data found for this city.</p>`;
+                return;
+            }
+
+            places.forEach(place => {
+                const card = document.createElement("div");
+                card.style.cssText = "background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column;";
+                card.innerHTML = `
+                    <div style="height: 140px; background-image: url('${place.img}'); background-size: cover; background-position: center;"></div>
+                    <div style="padding: 14px; display: flex; flex-direction: column; gap: 4px; flex: 1;">
+                        <h4 style="color: var(--primary); font-size: 1rem;"><i class="fa-solid fa-location-dot"></i> ${place.name}</h4>
+                        <p style="font-size: 0.8rem; color: var(--primary-accent); font-weight: 600;">${place.category}</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">${place.address}</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        });
+
+        const openAuthBtn = document.getElementById("openAuthBtn");
+        const closeAuthBtn = document.getElementById("closeAuthBtn");
+        const authModal = document.getElementById("authModal");
+
+        if (openAuthBtn && authModal) {
+            openAuthBtn.addEventListener("click", () => {
+                authModal.style.display = "flex";
+            });
+        }
+
+        if (closeAuthBtn && authModal) {
+            closeAuthBtn.addEventListener("click", () => {
+                authModal.style.display = "none";
+            });
+        }
+    </script>
+
+    <!-- Footer Index -->
+    <footer class="app-footer">
+        <p>© 2026 <strong>JomJalan</strong> | Weather & Smart Travel Planner</p>
+        <p class="footer-subtext">Powered by OpenWeather API & Electron Framework</p>
+    </footer>
+
+    <script src="api.js"></script>
+    <script src="renderer.js"></script>
+</body>
+</html>

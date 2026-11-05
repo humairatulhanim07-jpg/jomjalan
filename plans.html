@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JomJalan - My Travel Plans</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="brand-title">
+                <h1><i class="fa-solid fa-earth-americas"></i> JomJalan</h1>
+            </div>
+            <div class="header-right">
+                <nav class="nav-links">
+                    <a href="index.html"><i class="fa-solid fa-compass"></i> Explore</a>
+                    <a href="worldtime.html"><i class="fa-solid fa-clock"></i> World Time</a>
+                    <a href="places.html"><i class="fa-solid fa-map-location-dot"></i> Attractions</a>
+                    <a href="plans.html" class="active"><i class="fa-solid fa-bookmark"></i> My Plans</a>
+                </nav>
+                <button id="openAuthBtn" class="btn-signin">
+                    <i class="fa-solid fa-user"></i> Sign In
+                </button>
+            </div>
+        </header>
+
+        <section class="hero-section">
+            <h2 class="hero-title">My Travel Plans</h2>
+            <p class="hero-subtitle">Manage your travel itineraries, destination budgets, and activities seamlessly.</p>
+        </section>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px;">
+            <div>
+                <h3 id="formTitle" class="section-title">Create New Travel Plan</h3>
+                <form id="planForm" style="display: flex; flex-direction: column; gap: 14px;">
+                    <input type="hidden" id="editIndex" value="">
+                    
+                    <div class="input-group">
+                        <label for="planTitleInput">Travel / Plan Name:</label>
+                        <input type="text" id="planTitleInput" placeholder="e.g. Autumn Trip to Tokyo" class="custom-input" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="destinationInput">Destination Country/City:</label>
+                        <input type="text" id="destinationInput" placeholder="e.g. Tokyo, Japan" class="custom-input" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="budgetInput">Estimated Budget (RM):</label>
+                        <input type="number" id="budgetInput" placeholder="e.g. 3500" class="custom-input" min="0" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="activitiesInput">Planned Activities & Notes:</label>
+                        <textarea id="activitiesInput" rows="4" placeholder="e.g. Day 1: Visit Senso-ji Temple." class="custom-input" style="resize: vertical; padding: 10px;" required></textarea>
+                    </div>
+
+                    <div style="display: flex; gap: 10px;">
+                        <button type="submit" id="saveBtn" class="btn-explore" style="flex: 1;">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Plan
+                        </button>
+                        <button type="button" id="cancelEditBtn" class="btn-secondary" style="display: none; padding: 12px;">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div>
+                <h3 class="section-title"><i class="fa-solid fa-folder-open"></i> Saved Travel Itineraries</h3>
+                <div id="plansListContainer" style="display: flex; flex-direction: column; gap: 16px; max-height: 480px; overflow-y: auto;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="authModal" class="modal-overlay" style="display: none;">
+        <div class="modal-card">
+            <button id="closeAuthBtn" class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+            <h3 style="margin-bottom: 20px; color: var(--primary);"><i class="fa-solid fa-user"></i> Sign In to JomJalan</h3>
+            <form id="authForm" style="display: flex; flex-direction: column; gap: 14px;">
+                <div class="input-group">
+                    <label for="emailInput">Email Address:</label>
+                    <input type="email" id="emailInput" class="custom-input" placeholder="user@example.com" required>
+                </div>
+                <div class="input-group">
+                    <label for="passwordInput">Password:</label>
+                    <input type="password" id="passwordInput" class="custom-input" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-explore" style="width: 100%; margin-top: 8px;">Sign In</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer Index -->
+    <footer class="app-footer">
+        <p>© 2026 <strong>JomJalan</strong> | Weather & Smart Travel Planner</p>
+        <p class="footer-subtext">Powered by OpenWeather API & Electron Framework</p>
+    </footer>
+
+    <script src="storage.js"></script>
+    <script src="plans.js"></script>
+</body>
+</html>
