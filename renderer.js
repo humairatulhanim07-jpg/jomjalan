@@ -102,10 +102,27 @@ if (searchBtn) {
             } else {
                 activityRecommendation = "🌿 Heritage Tour: Visit Batu Caves and stroll around Perdana Botanical Garden.";
             }
+        } else if (city === "London") {
+            if (weatherCondition === "Rain" || temp < 12) {
+                activityRecommendation = "🏛️ Indoor London Tour: Visit the British Museum and explore the Natural History Museum.";
+            } else {
+                activityRecommendation = "🌳 Outdoor London Tour: Walk along the South Bank and visit Hyde Park.";
+            }
+        }else if (city === "Paris") {
+            if (weatherCondition === "Rain") {
+                activityRecommendation = "🎨 Indoor Paris Experience: Explore the Louvre Museum and enjoy pastries in a classic Parisian café.";
+            } else {
+                activityRecommendation = "✨ Outdoor Paris Tour: Stroll along the Seine River and view the Eiffel Gardens.";
+            }
+        } else if (city === "Sydney") {
+            if (weatherCondition === "Rain" || temp > 30) {
+                activityRecommendation = "🦈 Indoor Sydney Experience: Visit SEA LIFE Sydney Aquarium and shop at the Queen Victoria Building.";
+            } else {
+                activityRecommendation = "🌊 Outdoor Sydney Experience: Walk around Sydney Opera House and Bondi Beach.";
+            }
         } else {
-            activityRecommendation = "🚶‍♂️ City Tour: Clear skies ahead! Recommended to take a walking tour around city landmarks.";
+                activityRecommendation = "🚶‍♂️ City Tour: Clear skies ahead! Recommended to take a walking tour around city landmarks.";
         }
-
         document.getElementById("suggestionsText").innerHTML = `<p>${activityRecommendation}</p>`;
     });
 }
