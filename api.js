@@ -44,17 +44,3 @@ async function getWorldTime(timezone) {
         return null;
     }
 }
-
-async function getGeoapifyPlaces(lon, lat) {
-    const url = `https://api.geoapify.com/v2/places?categories=tourism&filter=rect:${parseFloat(lon)-0.1},${parseFloat(lat)+0.1},${parseFloat(lon)+0.1},${parseFloat(lat)-0.1}&limit=8&apiKey=${API_CONFIG.secondaryApiKey}`;
-
-    try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`Geoapify API Error: ${response.status}`);
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error("Geoapify API Error:", error);
-        return null;
-    }
-}

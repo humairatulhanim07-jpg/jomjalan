@@ -15,6 +15,19 @@ if (searchBtn) {
             return;
         }
 
+        // Semakan sambungan internet sebelum memanggil API
+        if (!navigator.onLine) {
+            alert("⚠️ No internet connection. Please check your Wi-Fi or network connection.");
+            document.getElementById("cityNameTitle").innerText = `${city}, International`;
+            document.getElementById("weatherDescText").innerText = "Offline mode - network unavailable";
+            document.getElementById("tempText").innerText = "28 °C";
+            document.getElementById("conditionText").innerText = "Unknown";
+            document.getElementById("humidityText").innerText = "75%";
+            document.getElementById("windText").innerText = "3.5 m/s";
+            document.getElementById("suggestionsText").innerHTML = `<p>⚠️ Network Error: Unable to fetch live weather data because your internet is disconnected. Please reconnect to view live weather and tailored recommendations.</p>`;
+            return;
+        }
+
         currentCity = city;
         //DOM1 bila user tekan button explore dia akan display result container
         const resultContainer = document.getElementById("resultContainer");
@@ -59,6 +72,7 @@ if (searchBtn) {
 
         //Senario Ralat: Permintaan API Gagal (Failed API Requests)
         if (!weatherData || weatherData.cod !== 200) {
+            alert("⚠️ Failed to retrieve live weather data from server.");
             document.getElementById("cityNameTitle").innerText = `${city}, International`;
             document.getElementById("weatherDescText").innerText = "Live weather connection restricted";
             document.getElementById("tempText").innerText = "28 °C";
