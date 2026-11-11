@@ -82,7 +82,7 @@ if (searchBtn) {
             document.getElementById("conditionText").innerText = "Clear";
             document.getElementById("humidityText").innerText = "75%";
             document.getElementById("windText").innerText = "3.5 m/s";
-            //DOM5 jika weather data tak dapat, display default message and recommendation
+            //DOM5 display default message and recommendation
             document.getElementById("suggestionsText").innerHTML = `<p>☀️ General Travel Recommendation: Perfect weather conditions to explore key landmarks in ${city}. Enjoy your trip!</p>`;
             return;
         }
