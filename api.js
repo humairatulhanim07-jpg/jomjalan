@@ -5,6 +5,7 @@ const API_CONFIG = {
 };
 
 //task2 integrate external apis and process JSON
+//ada liam fetch
 async function getWeather(city) {
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${API_CONFIG.weatherApiKey}&units=metric`;
 

@@ -5,6 +5,7 @@ const searchBtn = document.getElementById("searchBtn");
 
 //task6 and 7 DOM manipulation,event handling and error handling
 if (searchBtn) {
+    //1. event listener for search button click
     //Acara Klik Butang Cari Destinasi / Cuaca
     searchBtn.addEventListener("click", async () => {
         const citySelect = document.getElementById("country");
@@ -15,7 +16,7 @@ if (searchBtn) {
             return;
         }
 
-        // Semakan sambungan internet sebelum memanggil API
+        //error handling: Semakan sambungan internet sebelum memanggil API (Failed APIs Requests)
         if (!navigator.onLine) {
             alert("⚠️ No internet connection. Please check your Wi-Fi or network connection.");
             document.getElementById("cityNameTitle").innerText = `${city}, International`;
@@ -33,9 +34,11 @@ if (searchBtn) {
         const resultContainer = document.getElementById("resultContainer");
         resultContainer.style.display = "block";
 
-        //5 api code data in rubric 2
-        document.getElementById("cityNameTitle").innerText = "Loading destination data...";//DOM2 ubah teks elemen tajuk dan display loading message
-        document.getElementById("weatherDescText").innerText = "Please wait...";//DOM3  sama jugak macam atas
+        //DOM2 ubah teks elemen tajuk dan display loading message
+        document.getElementById("cityNameTitle").innerText = "Loading destination data...";
+        //DOM3  sama jugak macam atas
+        document.getElementById("weatherDescText").innerText = "Please wait...";
+
         document.getElementById("tempText").innerText = "-- °C";
         document.getElementById("conditionText").innerText = "--";
         document.getElementById("humidityText").innerText = "--%";
@@ -70,7 +73,7 @@ if (searchBtn) {
         bannerElement.style.backgroundImage = `linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('${bgUrl}')`;
     }
 
-        //Senario Ralat: Permintaan API Gagal (Failed API Requests)
+        //error handling: Permintaan API Gagal (Failed API Requests)
         if (!weatherData || weatherData.cod !== 200) {
             alert("⚠️ Failed to retrieve live weather data from server.");
             document.getElementById("cityNameTitle").innerText = `${city}, International`;
@@ -85,10 +88,15 @@ if (searchBtn) {
         }
 
         currentWeatherData = weatherData;
+        //1.temperature
         const temp = weatherData.main.temp;
+        //2. condition
         const weatherCondition = weatherData.weather[0].main;
+        //3. description
         const weatherDesc = weatherData.weather[0].description;
+        //4. humidity
         const humidity = weatherData.main.humidity;
+        //5. wind speed
         const windSpeed = weatherData.wind.speed;
         const countryCode = weatherData.sys.country;
 
@@ -123,7 +131,7 @@ if (searchBtn) {
                 activityRecommendation = "🌳 Outdoor London Tour: Walk along the South Bank and visit Hyde Park.";
             }
         }else if (city === "Paris") {
-            if (weatherCondition === "Rain") {
+            if (weatherCondition === "Rain" || temp < 15) {
                 activityRecommendation = "🎨 Indoor Paris Experience: Explore the Louvre Museum and enjoy pastries in a classic Parisian café.";
             } else {
                 activityRecommendation = "✨ Outdoor Paris Tour: Stroll along the Seine River and view the Eiffel Gardens.";
@@ -134,13 +142,12 @@ if (searchBtn) {
             } else {
                 activityRecommendation = "🌊 Outdoor Sydney Experience: Walk around Sydney Opera House and Bondi Beach.";
             }
-        } else {
-                activityRecommendation = "🚶‍♂️ City Tour: Clear skies ahead! Recommended to take a walking tour around city landmarks.";
         }
         document.getElementById("suggestionsText").innerHTML = `<p>${activityRecommendation}</p>`;
     });
 }
 
+//2. event listener for Enter key press on the dropdown
 //code calculate insurance and validation 
 const calculateBtn = document.getElementById("calculateBtn");
 
@@ -159,7 +166,7 @@ if (calculateBtn) {
         }
 
         // Validate input values(positive value)
-        //Senario Ralat: Input Tidak Sah (Invalid Input)
+        //error handling: Input Tidak Sah (Invalid Input)
         let isValid = true;
         
         if (isNaN(days)) {
@@ -219,6 +226,7 @@ function initAuthModalHandlers() {
 
     const authForm = document.getElementById("authForm");
     if (authForm) {
+        //3. event listener for form submission
         //Acara Hantar Borang Pengesahan (Authentication Form Submission)
         authForm.onsubmit = (e) => {
             e.preventDefault();
@@ -238,4 +246,5 @@ function initAuthModalHandlers() {
     }
 }
 
+//5. event listener for DOMContentLoaded to initialize modal handlers
 document.addEventListener("DOMContentLoaded", initAuthModalHandlers);

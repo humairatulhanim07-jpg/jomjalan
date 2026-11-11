@@ -2,7 +2,7 @@ class TravelPlanManager {
     constructor() {
         this.storageKey = "jomjalan_plans";
         this.initListeners();
-        this.renderPlansList();
+        this.renderPlansList();// READ: Membaca & memaparkan rekod
     }
 
     // Mengambil data daripada LocalStorage
@@ -13,7 +13,7 @@ class TravelPlanManager {
         }
         return JSON.parse(data);
     }
-
+    
     // Menyimpan data ke LocalStorage
     savePlansToStorage(plans) {
         localStorage.setItem(this.storageKey, JSON.stringify(plans));
@@ -26,6 +26,7 @@ class TravelPlanManager {
             const cancelEditBtn = document.getElementById("cancelEditBtn");
 
             if (planForm) {
+                //4. event listener for form submission plan
                 planForm.addEventListener("submit", (e) => {
                     e.preventDefault();
                     this.handleFormSubmit();
@@ -101,6 +102,7 @@ class TravelPlanManager {
         container.innerHTML = "";
         const plans = this.getPlans();
 
+        //error handling: Tiada rancangan yang disimpan (No saved plans)
         if (plans.length === 0) {
             container.innerHTML = `
                 <div style="text-align: center; padding: 40px; color: #94a3b8;">
@@ -154,7 +156,7 @@ class TravelPlanManager {
         document.getElementById("cancelEditBtn").style.display = "block";
     }
 
-    // Memadam rancangan
+    // DELETE: Memadam rekod dan mengemas kini LocalStorage
     removePlan(index) {
         if (confirm("Are you sure you want to delete this travel plan?")) {
             const plans = this.getPlans();
