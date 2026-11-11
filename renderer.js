@@ -3,7 +3,6 @@ let currentCity = "";
 
 const searchBtn = document.getElementById("searchBtn");
 
-//task6 and 7 DOM manipulation,event handling and error handling
 if (searchBtn) {
     //1. event listener for search button click
     //Acara Klik Butang Cari Destinasi / Cuaca
