@@ -145,6 +145,7 @@ class TravelPlanManager {
 
         if (!plan) return;
 
+        //update form fields with the selected plan's data
         document.getElementById("planTitleInput").value = plan.title;
         document.getElementById("destinationInput").value = plan.destination;
         document.getElementById("budgetInput").value = plan.budget.replace(/,/g, '');
